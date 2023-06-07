@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Back from "../img/back.png";
 import Edit from "../img/edit.png";
 import CheckMark from "../img/checkmark.png";
@@ -22,6 +22,12 @@ const ProfileInfo = ({
   const [showOptions, setShowOptions] = useState(false);
   const { currentUser } = useContext(AuthContext);
   const [dpUrl, setDpUrl] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const handleLabelClick = () => {
+    fileInputRef.current.click();
+  };
+
   const handleSelectPhoto = async (e) => {
     const storage = getStorage();
     const file = e.target.files[0];
@@ -66,14 +72,15 @@ const ProfileInfo = ({
               <p>View Photo</p>
               <input
                 required
+                ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 name="file"
-                id="change-dp"
+                id="changeDp"
                 style={{ display: "none" }}
                 onChange={handleSelectPhoto}
               />
-              <label htmlFor="change-dp">
+              <label onClick={handleLabelClick} htmlFor="changeDp">
                 <p>Upload Photo</p>
               </label>
               <p>Remove Photo</p>
