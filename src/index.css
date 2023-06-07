@@ -1,0 +1,661 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+}
+body {
+  height: 100vh;
+  background-color: #25d366;
+}
+img {
+  cursor: pointer;
+}
+.login-wrapper,
+.register-wrapper,
+.homepage-wrapper {
+  background-color: inherit;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.form-div {
+  padding: 1.2em 1.5em;
+  background-color: white;
+  width: auto;
+  border-radius: 10px;
+}
+.form-div h2,
+.form-div p {
+  text-align: center;
+}
+.form-div button,
+.form-div input {
+  display: block;
+  width: 100%;
+  margin-block: 1.5em;
+  padding: 0.75em;
+  border: none;
+}
+.form-div input {
+  outline: none;
+  border-bottom: 1px solid gray;
+}
+.form-div img.show-hide-password {
+  width: 20px;
+}
+.form-div button {
+  background-color: #25d366;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  margin-block: 1.75em;
+}
+.form-div label {
+  cursor: pointer;
+}
+.password-forget {
+  margin-block: 1em;
+}
+.add-avatar {
+  width: 30px;
+  vertical-align: middle;
+}
+.login-error {
+  color: red;
+}
+.find-account-div {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
+.find-account-wrapper {
+  width: auto;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  gap: 0.75em;
+  padding: 1em;
+  border-radius: 10px;
+}
+.find-account-wrapper input {
+  padding: 0.7em;
+  border-radius: 7px;
+  border: 1px solid gray;
+  margin-bottom: 0.5em;
+}
+.find-account-wrapper div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5em;
+}
+.find-account-wrapper div button {
+  border-radius: 5px;
+  font-family: inherit;
+  padding: 0.75em 1.25em;
+  font-size: 1rem;
+  font-weight: 700;
+  background: #e9edef;
+  border: none;
+  cursor: pointer;
+}
+.find-account-wrapper div button.find-account-btn {
+  background-color: #25d366;
+  color: white;
+}
+.homepage-wrapper > div {
+  position: relative;
+  background-color: #efeae2;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  width: 75%;
+  margin: auto;
+  height: 85vh;
+  padding: 0;
+  border-radius: 10px;
+  background-size: cover;
+}
+
+.sidebar {
+  background-color: #ffffff;
+  border-radius: 10px 0 0 10px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+.sidebar.small {
+  display: none;
+}
+.start-chatting {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.navbar {
+  background: #f0f2f5;
+  padding: 1em;
+  position: relative;
+  display: flex;
+  height: 55px;
+  align-items: center;
+  gap: 1em;
+}
+.navbar div {
+  flex-grow: 5;
+}
+.navbar img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+.navbar .dp {
+  width: 40px;
+  height: 40px;
+}
+.navbar img.small-navbar-icon {
+  display: none;
+}
+
+.searchpanel-input {
+  background: #ffffff;
+  padding: 1em;
+  border-bottom: 1px solid gray;
+  flex: 0 1 70px;
+}
+.searchpanel-input input {
+  display: block;
+  width: 90%;
+  padding: 0.5em;
+  background-color: #f0f2f5;
+  border-radius: 10px;
+  margin: auto;
+  border: none;
+}
+.searchpanel ::placeholder {
+  color: grey;
+}
+.searchpanel input:focus {
+  outline: none;
+  border: 2px solid #075e54;
+}
+.contacts-panel {
+  flex-grow: 5;
+}
+.contacts-panel .contacts,
+.searched-user-div {
+  display: grid;
+  cursor: pointer;
+  grid-template-columns: 50px auto;
+  align-items: center;
+  padding: 0.8em;
+  column-gap: 0.75em;
+  border-bottom: 1px solid gray;
+}
+.contacts img,
+.searched-user-div img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  grid-row: 1/3;
+}
+.chat-interface {
+  background-image: url("../src/img/whatsapp.jpg");
+  background-size: contain;
+  border-radius: 0 10px 10px 0;
+  position: relative;
+  padding-top: 3.44em;
+}
+.chat-interface.small {
+  display: none;
+}
+.chat-interface nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.chat-interface nav div {
+  display: grid;
+  padding: 0.5em;
+  grid-template-columns: 50px auto;
+  height: 55px;
+  background-color: #f0f2f5;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  cursor: pointer;
+}
+.chat-interface nav div .hide {
+  display: none;
+}
+.chat-interface nav img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  grid-row: 1/3;
+}
+
+.hidden {
+  display: none;
+}
+.messages {
+  height: calc(85vh - 120px);
+  padding: 1em;
+  padding-bottom: 3.75em;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.messages.small {
+  height: calc(44vh - 120px);
+}
+
+.messages > * {
+  width: fit-content;
+  max-width: 250px;
+  padding: 0.85em;
+  position: relative;
+  border-radius: 10px;
+  display: block;
+  min-width: 100px;
+}
+.messages div img {
+  width: 100%;
+}
+.messages > .owner {
+  background: #d1f4cc;
+  align-self: flex-end;
+}
+.messages > .friend {
+  background: white;
+}
+.messages > .owner > p:last-of-type,
+.messages > .friend > p:last-of-type {
+  margin-block: 0.5em;
+}
+
+.owner span,
+.friend span {
+  position: absolute;
+  bottom: 0.25em;
+  right: 0.5em;
+  font-size: 0.75em;
+}
+.message-input-section {
+  position: absolute;
+  width: 100%;
+  background-color: #f0f2f5;
+  bottom: 0;
+  padding: 0.5em;
+  border-radius: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  height: 65px;
+}
+.picker {
+  height: calc(40vh - 120px);
+  position: relative;
+}
+.picker div {
+  height: calc(40vh - 120px);
+}
+.selected-img-div {
+  padding: 1em;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #e9edef;
+}
+.selected-img-div .close-btn {
+  display: block;
+  margin-block: 0.5em;
+  width: 1em;
+  margin-right: auto;
+}
+.selected-img-div .selected-img-wrapper {
+  margin: auto;
+  transform: translateX(30%);
+}
+.selected-img-div .selected-img-wrapper img {
+  width: 30%;
+}
+.selected-img-div input {
+  display: block;
+  width: 80%;
+  margin-block: 1rem;
+  padding: 1em;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+}
+.img-preview-div {
+  margin-left: auto;
+  width: 100%;
+  border: 1px solid red;
+  padding: 0.9em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+.img-preview-div div {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e9edef;
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+.send-img-btn-div {
+  position: absolute;
+  display: flex;
+  background-color: #019b7b;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  right: 1.5em;
+  bottom: 1.5em;
+  justify-content: center;
+  align-items: center;
+}
+
+.message-input-section img {
+  width: 25px;
+  cursor: pointer;
+}
+.message-input-section textarea {
+  flex-basis: 60%;
+  flex-grow: 5;
+  padding: 0.75em;
+  border: none;
+  resize: none;
+  margin: auto;
+  height: 80%;
+  border-radius: 10px;
+}
+.message-input-section textarea::placeholder {
+  padding-left: 0.5em;
+}
+.message-input-section textarea::-webkit-scrollbar {
+  display: none;
+}
+.message-input-section textarea:focus {
+  outline: none;
+}
+.message-input-section div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.message-input-section div * {
+  cursor: pointer;
+}
+.bad-connection {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.owner-profile {
+  position: relative;
+  height: 100%;
+  background-color: #f0f2f5;
+  overflow-y: scroll;
+}
+.owner-profile .header {
+  display: flex;
+  background: #008069;
+  color: white;
+  position: absolute;
+  top: 0;
+  height: 90px;
+  width: 100%;
+  padding: 1em;
+  padding-top: 1.875em;
+  align-items: center;
+  gap: 1.5em;
+}
+.owner-profile .header img {
+  cursor: pointer;
+}
+.owner-profile .dp-div {
+  background: #f0f2f5;
+  margin-top: 80px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 40%;
+  position: relative;
+}
+.owner-profile .dp-div img {
+  width: 155px;
+  height: 155px;
+  border-radius: 50%;
+  margin: auto;
+  display: block;
+  cursor: pointer;
+}
+.owner-profile .dp-div img:hover {
+  filter: grayscale(30%);
+}
+.dp-options {
+  background: white;
+  padding: 1em;
+  position: absolute;
+  border-radius: 10px;
+  right: 1em;
+  bottom: -3em;
+  z-index: 2;
+  display: grid;
+  gap: 1em;
+  cursor: pointer;
+}
+
+.display-name-div,
+.about {
+  background-color: white;
+  padding: 1em;
+  min-height: 18%;
+  max-height: fit-content;
+}
+.display-name-div > p,
+.about > p {
+  color: #008069;
+}
+.display-name-div div,
+.about div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block: 1em;
+  color: #3b4a54;
+  gap: 0.5em;
+}
+
+.display-name-div div img,
+.about div img {
+  width: 15px;
+  cursor: pointer;
+}
+.display-name-div .edit-username,
+.about .edit-about {
+  padding: 0.5em;
+  border-bottom: 2px solid green;
+}
+.display-name-div .edit-username input,
+.about .edit-about input {
+  border: none;
+  outline: none;
+  width: 85%;
+}
+.fourth-div {
+  padding: 1em;
+}
+.fourth-div p {
+  color: #9ca9b2;
+}
+.owner-profile::-webkit-scrollbar {
+  width: 0.7em;
+}
+.owner-profile::-webkit-scrollbar-track {
+  background-color: inherit;
+}
+.owner-profile::-webkit-scrollbar-thumb {
+  background-color: #c4c6ca;
+}
+
+/* ///////////////////////////////MEDIA QUERIES/////////////////////////////// */
+@media screen and (max-width: 800px) {
+  .homepage-wrapper > div {
+    width: 100%;
+    height: 100%;
+  }
+  .messages {
+    height: calc(100vh - 120px);
+  }
+  .messages.small {
+    height: calc(60vh - 120px);
+  }
+}
+@media screen and (max-width: 600px) {
+  .navbar img.small-navbar-icon {
+    display: inline-block;
+  }
+  .big-navbar-icon {
+    display: none;
+  }
+
+  .homepage-wrapper > div {
+    grid-template-columns: 100%;
+  }
+  .start-chatting {
+    display: none;
+  }
+  .chat-interface.big,
+  .sidebar.big {
+    display: none;
+  }
+  .chat-interface.small,
+  .sidebar.small {
+    display: block;
+  }
+  .sidebar nav {
+    background-color: #128c7e;
+  }
+  .chat-interface nav {
+    margin-bottom: 1.69em;
+  }
+  .chat-interface nav div {
+    background-color: #128c7e;
+    color: white;
+    grid-template-columns: 40px 50px auto;
+    height: 80px;
+    column-gap: 0.5em;
+    align-items: center;
+  }
+  .small .navbar,
+  .searchpanel-input {
+    height: 80px;
+  }
+
+  .searchpanel-input input {
+    height: 80%;
+  }
+  .searchpanel-input input::placeholder {
+    font-size: 1em;
+    font-weight: 500;
+  }
+  .chat-interface nav div p,
+  .chat-interface nav div span {
+    margin-block: 0.5em;
+    font-size: 1.1em;
+  }
+  .chat-interface nav div span {
+    margin-top: -0.5em;
+  }
+  .chat-interface nav img.dp {
+    width: 50px;
+    height: 50px;
+  }
+  .chat-interface nav img.back-arrow {
+    display: grid;
+  }
+  .messages {
+    margin-top: 2.5em;
+  }
+  .messages p,
+  .contacts-panel .contacts p {
+    font-size: 1.5em;
+  }
+  .messages .owner span,
+  .messages .friend span {
+    font-size: 1em;
+  }
+  .img-preview-div {
+    max-width: 200px;
+    overflow: scroll;
+    margin-right: auto;
+    margin-left: 0;
+  }
+}
+/* Though this media query has the sane breakpoint as the one above,
+ i only wrote another media query cos i didint want some style to remain at 300px or lower screen sizes */
+@media screen and (max-width: 600px) and (min-width: 301px) {
+  .owner-profile .dp-div img {
+    width: 285px;
+    height: 285px;
+  }
+  .display-name-div div p,
+  .about div p {
+    font-size: 1.75em;
+  }
+  .owner-profile .header h4 {
+    font-size: 1.85em;
+  }
+
+  .display-name-div,
+  .about {
+    height: 125px;
+  }
+  .display-name-div div img,
+  .about div img {
+    width: 32px;
+  }
+  .display-name-div > p,
+  .about > p {
+    font-size: 2em;
+  }
+  .fourth-div p {
+    font-size: 1.5em;
+  }
+}
+@media screen and (max-width: 300px) {
+  .chat-interface nav div p,
+  .chat-interface nav div span {
+    font-size: 0.75em;
+  }
+  .about {
+    height: 160px;
+    line-height: 1.5;
+  }
+  .owner-profile .dp-div img {
+    width: 185px;
+    height: 185px;
+  }
+}
