@@ -9,6 +9,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { AuthContext } from "../Contexts/AuthContext";
 import { firestoredb } from "..";
 import defaultDP from "../img/user.png";
+import removeDp from "../utils/removeDp";
 const ProfileInfo = ({
   data,
   editUsername,
@@ -22,12 +23,11 @@ const ProfileInfo = ({
   const [showOptions, setShowOptions] = useState(false);
   const { currentUser } = useContext(AuthContext);
   const [dpUrl, setDpUrl] = useState(null);
-  const fileInputRef = useRef(null);
 
-  const handleLabelClick = () => {
-    fileInputRef.current.click();
+  const handleRemoveDp = () => {
+    removeDp(currentUser);
+    setShowOptions(false);
   };
-
   const handleSelectPhoto = async (e) => {
     const storage = getStorage();
     const file = e.target.files[0];
@@ -35,9 +35,10 @@ const ProfileInfo = ({
       storage,
       `images/${currentUser.uid}/${currentUser.displayName}`
     );
-
+    setShowOptions(false);
     await uploadBytes(imgRef, file);
     const url = await getDownloadURL(imgRef);
+    console.log(url);
     setDpUrl(url);
     await updateProfile(currentUser, {
       photoURL: url,
@@ -53,7 +54,9 @@ const ProfileInfo = ({
     <>
       <aside
         className="owner-profile"
-        onClick={() => showOptions && setShowOptions(false)}
+        onClick={(e) => {
+          console.dir(e.target);
+        }}
       >
         <div className="header">
           <img
@@ -68,22 +71,20 @@ const ProfileInfo = ({
         <div className="dp-div">
           <img onClick={() => setShowOptions(true)} src={dpUrl ? dpUrl : pic} />
           {showOptions && (
-            <div className="dp-options">
-              <p>View Photo</p>
+            <div onClick={(e) => e.stopPropagation()} className="dp-options">
               <input
                 required
-                ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 name="file"
-                id="changeDp"
+                id="file"
                 style={{ display: "none" }}
                 onChange={handleSelectPhoto}
               />
-              <label onClick={handleLabelClick} htmlFor="changeDp">
-                <p>Upload Photo</p>
+              <label id="upload-dp" htmlFor="file">
+                Upload Photo
               </label>
-              <p>Remove Photo</p>
+              <p onClick={handleRemoveDp}>Remove Photo</p>
             </div>
           )}
         </div>
