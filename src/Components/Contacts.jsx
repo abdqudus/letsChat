@@ -69,8 +69,7 @@ export const Contacts = () => {
                 <div style={{ display: "flex", gap: ".5em" }}>
                   {photo}{" "}
                   <p>
-                    {chat[1].lastMessage.text &&
-                    chat[1].lastMessage.text.length > 25
+                    {chat[1].lastMessage.text && chat[1].lastMessage.text.length > 25
                       ? chat[1].lastMessage.text.substr(0, 25) + "..."
                       : chat[1].lastMessage.text.length < 25
                       ? chat[1].lastMessage.text
