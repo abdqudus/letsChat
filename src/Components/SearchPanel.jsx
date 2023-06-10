@@ -20,11 +20,13 @@ import { AuthContext } from "../Contexts/AuthContext";
 import { ChatContext } from "../Contexts/ChatContext";
 import { showChatContext } from "../Contexts/ShowChatContext";
 import defaultDP from "../img/user.png";
+import { mobileDeviceChatContext } from "../Contexts/ShowMobileDeviceChat";
 const SearchPanel = () => {
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
   const secondDispatch = useContext(showChatContext).dispatch;
   const [username, setUsername] = useState([]);
+  const { setShowMobileChat, width } = useContext(mobileDeviceChatContext);
   const user = useRef(null);
   const handleSearch = async (e) => {
     if (e.target.value) {
@@ -49,6 +51,9 @@ const SearchPanel = () => {
     user.current = username.find((u) => u.uid === element.id);
     dispatch({ type: "change_user", payload: user.current });
     secondDispatch({ type: "show chat", payload: true });
+    if (width <= 600) {
+      setShowMobileChat(true);
+    }
     setUsername([user.current]);
 
     const combinedId =

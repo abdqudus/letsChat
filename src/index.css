@@ -28,6 +28,7 @@ img {
 .form-div h2,
 .form-div p {
   text-align: center;
+  margin-block: 1em;
 }
 .form-div button,
 .form-div input {
@@ -54,6 +55,7 @@ img {
 }
 .form-div label {
   cursor: pointer;
+  margin-block: 1em;
 }
 .password-forget {
   margin-block: 1em;
@@ -205,6 +207,11 @@ img {
   border-radius: 50%;
   grid-row: 1/3;
 }
+.last-msg-div {
+  display: flex;
+  gap: 0.75em;
+  align-items: center;
+}
 .chat-interface {
   background-image: url("../src/img/whatsapp.jpg");
   background-size: contain;
@@ -224,6 +231,7 @@ img {
   display: grid;
   padding: 0.5em;
   grid-template-columns: 50px auto;
+
   height: 55px;
   background-color: #f0f2f5;
   position: absolute;
@@ -534,6 +542,9 @@ img {
   }
 }
 @media screen and (max-width: 600px) {
+  .form-div {
+    width: 80%;
+  }
   .navbar img.small-navbar-icon {
     display: inline-block;
   }
@@ -566,6 +577,7 @@ img {
     color: white;
     grid-template-columns: 40px 50px auto;
     height: 80px;
+    row-gap: 0.5rem;
     column-gap: 0.5em;
     align-items: center;
   }
@@ -601,7 +613,7 @@ img {
   }
   .messages p,
   .contacts-panel .contacts p {
-    font-size: 1.5em;
+    font-size: 1.2rem;
   }
   .messages .owner span,
   .messages .friend span {
@@ -623,10 +635,10 @@ img {
   }
   .display-name-div div p,
   .about div p {
-    font-size: 1.75em;
+    font-size: 1.5rem;
   }
   .owner-profile .header h4 {
-    font-size: 1.85em;
+    font-size: 1.85rem;
   }
 
   .display-name-div,

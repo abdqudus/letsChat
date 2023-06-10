@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Add from "../img/addAvatar.png";
 import { storage } from "../index";
@@ -10,6 +10,7 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import Loader from "../Components/Loader";
 import { setDoc, doc } from "firebase/firestore";
 import setDatabase from "../utils/setDatabase";
 export default function SignUp() {
@@ -20,6 +21,7 @@ export default function SignUp() {
     displayName: "",
     email: "",
     password: "",
+    url: "",
   });
 
   const [img, setImg] = useState(null);
@@ -79,8 +81,17 @@ export default function SignUp() {
   };
 
   const handleChange = (e) => {
+    console.log(e.target.value);
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
+  };
+  const handleSelectImg = (e) => {
+    setImg(e.target.files[0]);
+    const reader = new FileReader();
+    reader.addEventListener("loadend", (e) => {
+      setUser((prev) => ({ ...prev, url: e.target.result }));
+    });
+    reader.readAsDataURL(e.target.files[0]);
   };
   return (
     <div className="register-wrapper">
@@ -121,19 +132,33 @@ export default function SignUp() {
             name="file"
             id="file"
             style={{ display: "none" }}
-            onChange={(e) => setImg(e.target.files[0])}
+            onChange={handleSelectImg}
           />
-          <label htmlFor="file">
-            <img className="add-avatar" src={Add} alt="" />
-            <span>Add an avatar</span>
-          </label>
+          {!img && (
+            <label htmlFor="file">
+              <img className="add-avatar" src={Add} alt="" />
+              <span>Add an avatar</span>
+            </label>
+          )}
+          {img && (
+            <img
+              style={{
+                marginInline: "auto",
+                width: "50px",
+                height: "50px",
+                borderRadius: "50%",
+              }}
+              src={user.url}
+            />
+          )}
           {err.includes("email-already-in-use") && (
             <p style={{ color: "red" }}>
-              This email has already been used, Do you wish to
-              <Link to="/login">Sign in?</Link>{" "}
+              {`This email has already been used, Do you wish to ${" "}`}
+              <Link to="/login"> Sign in?</Link>{" "}
             </p>
           )}
           <button>{isSigningUp ? "Signing up " : "Sign up"}</button>
+          {isSigningUp && <Loader />}
         </form>
         <p>
           Already have an account? <Link to="/login">Sign In</Link>

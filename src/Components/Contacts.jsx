@@ -57,7 +57,7 @@ export const Contacts = () => {
                     : defaultDP
                 }
               />
-              <p>{chat[1].userInfo.displayName}</p>
+              <h3>{chat[1].userInfo.displayName}</h3>
               {!chat[1].lastMessage.url && (
                 <p>
                   {chat[1].lastMessage.text.length > 24
@@ -66,10 +66,11 @@ export const Contacts = () => {
                 </p>
               )}
               {chat[1].lastMessage.url && (
-                <div style={{ display: "flex", gap: ".5em" }}>
-                  {photo}{" "}
+                <div className="last-msg-div">
+                  {photo}
                   <p>
-                    {chat[1].lastMessage.text && chat[1].lastMessage.text.length > 25
+                    {chat[1].lastMessage.text &&
+                    chat[1].lastMessage.text.length > 25
                       ? chat[1].lastMessage.text.substr(0, 25) + "..."
                       : chat[1].lastMessage.text.length < 25
                       ? chat[1].lastMessage.text

@@ -100,7 +100,7 @@ const ChatNav = () => {
             src={data.user.photoURL ? data.user.photoURL : defaultDP}
             alt="display picture"
           />
-          <p>{data.user.displayName}</p>
+          <h3>{data.user.displayName}</h3>
           {statusRef.current.isOnline && <span> online</span>}
           {lastSeenString && <span> {lastSeenString}</span>}
         </div>

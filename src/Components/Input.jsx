@@ -15,13 +15,11 @@ import {
 } from "firebase/firestore";
 import { firestoredb } from "../index";
 import { showEmojiContext } from "../Contexts/ShowEmojiContext";
-import { getDownloadURL, uploadBytes } from "firebase/storage";
 import { selectedImgContext } from "../Contexts/SelectedImgContext";
 const Input = ({ emoji }) => {
   const imgArref = useRef([]);
   const [dataurl, setDataUrl] = useState([]);
   const [cancel, setCancel] = useState(false);
-  const [images, setImages] = useState(null);
   const imgDispatch = useContext(selectedImgContext).dispatch;
   const { dispatch } = useContext(showEmojiContext);
   const [text, setText] = useState("");
