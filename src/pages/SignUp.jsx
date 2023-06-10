@@ -83,7 +83,7 @@ export default function SignUp() {
   const handleChange = (e) => {
     console.log(e.target.value);
     const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
+    setUser((prev) => ({ ...prev, [name]: value.toLowerCase() }));
   };
   const handleSelectImg = (e) => {
     setImg(e.target.files[0]);

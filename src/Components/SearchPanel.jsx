@@ -33,7 +33,7 @@ const SearchPanel = () => {
       const q = query(
         collection(firestoredb, "users"),
         orderBy("displayName"),
-        startAt(e.target.value),
+        startAt(e.target.value.toLowerCase()),
         endAt(e.target.value + "\uf8ff")
       );
       const querySnapshot = await getDocs(q);
