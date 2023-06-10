@@ -10,6 +10,7 @@ body {
 img {
   cursor: pointer;
 }
+
 .login-wrapper,
 .register-wrapper,
 .homepage-wrapper {
@@ -149,6 +150,7 @@ img {
   align-items: center;
   gap: 1em;
 }
+
 .navbar div {
   flex-grow: 5;
 }
@@ -425,6 +427,7 @@ img {
   height: 100%;
   background-color: #f0f2f5;
   overflow-y: scroll;
+  padding: 1em 0;
 }
 .owner-profile .header {
   display: flex;
@@ -630,8 +633,8 @@ img {
  i only wrote another media query cos i didint want some style to remain at 300px or lower screen sizes */
 @media screen and (max-width: 600px) and (min-width: 301px) {
   .owner-profile .dp-div img {
-    width: 285px;
-    height: 285px;
+    width: 250px;
+    height: 250px;
   }
   .display-name-div div p,
   .about div p {

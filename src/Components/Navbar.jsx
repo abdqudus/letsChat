@@ -7,6 +7,7 @@ import defaultDP from "../img/user.png";
 import More from "../img/more.png";
 const Navbar = ({ showUserProfile }) => {
   const { currentUser } = useContext(AuthContext);
+
   return (
     <nav className="navbar">
       <div>
