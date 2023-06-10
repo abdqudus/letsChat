@@ -58,12 +58,21 @@ export const Contacts = () => {
                 }
               />
               <p>{chat[1].userInfo.displayName}</p>
-              {!chat[1].lastMessage.url && <p>{chat[1].lastMessage.text}</p>}
+              {!chat[1].lastMessage.url && (
+                <p>
+                  {chat[1].lastMessage.text.length > 24
+                    ? chat[1].lastMessage.text.substr(0, 25) + "..."
+                    : chat[1].lastMessage.text}
+                </p>
+              )}
               {chat[1].lastMessage.url && (
                 <div style={{ display: "flex", gap: ".5em" }}>
                   {photo}{" "}
                   <p>
-                    {chat[1].lastMessage.text
+                    {chat[1].lastMessage.text &&
+                    chat[1].lastMessage.text.length > 25
+                      ? chat[1].lastMessage.text.substr(0, 25) + "..."
+                      : chat[1].lastMessage.text.length < 25
                       ? chat[1].lastMessage.text
                       : "Photo"}
                   </p>
