@@ -30,11 +30,12 @@ const SearchPanel = () => {
   const user = useRef(null);
   const handleSearch = async (e) => {
     if (e.target.value) {
+      const userName = e.target.value.toLowerCase();
       const q = query(
         collection(firestoredb, "users"),
         orderBy("displayName"),
-        startAt(e.target.value.toLowerCase()),
-        endAt(e.target.value + "\uf8ff")
+        startAt(userName),
+        endAt(userName + "\uf8ff")
       );
       const querySnapshot = await getDocs(q);
       const myArr = [];
