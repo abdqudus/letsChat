@@ -3,7 +3,6 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { AuthContext } from "../Contexts/AuthContext";
 import { firestoredb } from "..";
 import { useRef } from "react";
-// import ProfileInfo from "./ProfileInfo";
 const Profile = ({ showUserProfile }) => {
   const ProfileInfo = lazy(() => import("./ProfileInfo"));
   const [data, setData] = useState(null);
@@ -58,7 +57,7 @@ const Profile = ({ showUserProfile }) => {
   };
 
   return (
-    <Suspense fallback={<h1>Loading...</h1>}>
+    <Suspense fallback={<h1>Load</h1>}>
       <ProfileInfo
         showUserProfile={showUserProfile}
         data={data}

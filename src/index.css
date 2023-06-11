@@ -354,7 +354,8 @@ img {
 .img-preview-div {
   margin-left: auto;
   width: 100%;
-  border: 1px solid red;
+  border: 1px solid gray;
+  border-radius: 5px;
   padding: 0.9em;
   display: flex;
   justify-content: center;

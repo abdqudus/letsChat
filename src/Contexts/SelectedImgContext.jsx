@@ -10,7 +10,6 @@ export default function SelectedImgContextProvider({ children }) {
     }
   };
   const [state, dispatch] = useReducer(showSelectedImgReducer, false);
-  console.log(state);
   return (
     <selectedImgContext.Provider value={{ state, dispatch }}>
       {children}

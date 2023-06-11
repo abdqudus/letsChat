@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import Back from "../img/back.png";
 import Edit from "../img/edit.png";
 import CheckMark from "../img/checkmark.png";
@@ -38,7 +38,6 @@ const ProfileInfo = ({
     setShowOptions(false);
     await uploadBytes(imgRef, file);
     const url = await getDownloadURL(imgRef);
-    console.log(url);
     setDpUrl(url);
     await updateProfile(currentUser, {
       photoURL: url,
@@ -52,12 +51,7 @@ const ProfileInfo = ({
   const pic = data?.photoURL ? data.photoURL : defaultDP;
   return (
     <>
-      <aside
-        className="owner-profile"
-        onClick={(e) => {
-          console.dir(e.target);
-        }}
-      >
+      <aside className="owner-profile">
         <div className="header">
           <img
             onClick={() => {

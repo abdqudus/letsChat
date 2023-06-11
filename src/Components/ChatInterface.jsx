@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { Suspense, useContext } from "react";
 import Input from "./Input";
 import Messages from "./Messages";
 import ChatNav from "./ChatNav";
@@ -20,24 +20,16 @@ const ChatInterface = () => {
     setEmoji(emoji);
   };
   if (showChat) {
+    const size = showMobileChat ? "small" : "big";
     return (
       <>
-        <div className="chat-interface big">
+        <div className={`chat-interface ${size}`}>
           <ChatNav />
           {!showSelectedImg && <Messages />}
           {showEmoji && <Emoji handleEmoji={handleEmoji} />}
           {!showSelectedImg && <Input emoji={emoji} />}
           {showSelectedImg && <SelectedImg />}
         </div>
-        {showMobileChat && (
-          <div className="chat-interface small" id="chat-interface-sm">
-            <ChatNav />
-            {!showSelectedImg && <Messages />}
-            {showEmoji && <Emoji handleEmoji={handleEmoji} />}
-            {!showSelectedImg && <Input emoji={emoji} />}
-            {showSelectedImg && <SelectedImg />}
-          </div>
-        )}
       </>
     );
   }
