@@ -3,9 +3,11 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { AuthContext } from "../Contexts/AuthContext";
 import { firestoredb } from "..";
 import { useRef } from "react";
+import Loader from "../Components/Loader";
 const Profile = ({ showUserProfile }) => {
   const ProfileInfo = lazy(() => import("./ProfileInfo"));
   const [data, setData] = useState(null);
+
   const [editUsername, setEditUsername] = useState(false);
   const [editAbout, setEditAbout] = useState(false);
   const infoRef = useRef({});
@@ -57,7 +59,7 @@ const Profile = ({ showUserProfile }) => {
   };
 
   return (
-    <Suspense fallback={<h1>Load</h1>}>
+    <Suspense fallback={<Loader />}>
       <ProfileInfo
         showUserProfile={showUserProfile}
         data={data}
