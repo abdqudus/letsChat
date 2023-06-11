@@ -1,11 +1,10 @@
-import React, { Suspense, lazy, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import Navbar from "./Navbar";
 import SearchPanel from "./SearchPanel";
 import { mobileDeviceChatContext } from "../Contexts/ShowMobileDeviceChat";
 import Profile from "../Components/Profile";
 
 const Sidebar = ({ toggleChatOn }) => {
-  // const Profile = lazy(() => import("../Components/Profile"));
   const [showProfile, setShowProfile] = useState(false);
   const { width } = useContext(mobileDeviceChatContext);
   const showUserProfile = (boolean) => {
