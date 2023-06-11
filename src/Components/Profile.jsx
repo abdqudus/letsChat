@@ -1,10 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { Suspense, lazy, useContext, useState } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { AuthContext } from "../Contexts/AuthContext";
 import { firestoredb } from "..";
 import { useRef } from "react";
-import ProfileInfo from "./ProfileInfo";
+// import ProfileInfo from "./ProfileInfo";
 const Profile = ({ showUserProfile }) => {
+  const ProfileInfo = lazy(() => import("./ProfileInfo"));
   const [data, setData] = useState(null);
   const [editUsername, setEditUsername] = useState(false);
   const [editAbout, setEditAbout] = useState(false);
@@ -57,17 +58,19 @@ const Profile = ({ showUserProfile }) => {
   };
 
   return (
-    <ProfileInfo
-      showUserProfile={showUserProfile}
-      data={data}
-      setData={setData}
-      editUsername={editUsername}
-      setEditUsername={setEditUsername}
-      editAbout={editAbout}
-      setEditAbout={setEditAbout}
-      handleEdit={handleEdit}
-      handleChange={handleChange}
-    />
+    <Suspense fallback={<h1>Loading...</h1>}>
+      <ProfileInfo
+        showUserProfile={showUserProfile}
+        data={data}
+        setData={setData}
+        editUsername={editUsername}
+        setEditUsername={setEditUsername}
+        editAbout={editAbout}
+        setEditAbout={setEditAbout}
+        handleEdit={handleEdit}
+        handleChange={handleChange}
+      />
+    </Suspense>
   );
 };
 
