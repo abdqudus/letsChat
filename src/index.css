@@ -150,6 +150,18 @@ img {
   align-items: center;
   gap: 1em;
 }
+.logout-div {
+  color: white;
+  background: #a1a1a1;
+  position: absolute;
+  padding: 1em 1.5em;
+  cursor: pointer;
+  right: 0%;
+  top: 100%;
+}
+.small-signout {
+  background: #128c7e;
+}
 
 .navbar div {
   flex-grow: 5;

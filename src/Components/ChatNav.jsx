@@ -84,7 +84,6 @@ const ChatNav = () => {
       lastSeenString = `last seen on ${day}  `;
     }
   }
-
   return (
     <>
       <nav>
