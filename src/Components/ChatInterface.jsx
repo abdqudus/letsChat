@@ -2,25 +2,25 @@ import React, { Suspense, useContext } from "react";
 import Input from "./Input";
 import Messages from "./Messages";
 import ChatNav from "./ChatNav";
-import { showChatContext } from "../Contexts/ShowChatContext";
-import { showEmojiContext } from "../Contexts/ShowEmojiContext";
 import Emoji from "./emoji";
 import { useState } from "react";
 import SelectedImg from "./selectedImg";
-import { mobileDeviceChatContext } from "../Contexts/ShowMobileDeviceChat";
-import { selectedImgContext } from "../Contexts/SelectedImgContext";
+import { useSelector } from "react-redux";
+import { selectCurrentWindowSize } from "../store/window-size/window.selector";
+import { selectContactSlice } from "../store/contacts/contact-selector";
+import { selectedImgSlice } from "../store/selectedImg/selected-img-selector";
+import { selectEmojiSlice } from "../store/emoji/emoji-selector";
 const ChatInterface = () => {
-  const { showMobileChat } = useContext(mobileDeviceChatContext);
-
+  const { isMobileDevice } = useSelector(selectCurrentWindowSize);
   const [emoji, setEmoji] = useState();
-  const showChat = useContext(showChatContext).state;
-  const showEmoji = useContext(showEmojiContext).state;
-  const showSelectedImg = useContext(selectedImgContext).state;
+  const { showChat } = useSelector(selectContactSlice);
+  const { showEmoji } = useSelector(selectEmojiSlice);
+  const { showSelectedImg } = useSelector(selectedImgSlice);
   const handleEmoji = (emoji) => {
     setEmoji(emoji);
   };
   if (showChat) {
-    const size = showMobileChat ? "small" : "big";
+    const size = isMobileDevice ? "small" : "big";
     return (
       <>
         <div className={`chat-interface ${size}`}>

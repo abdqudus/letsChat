@@ -1,24 +1,25 @@
 import React, { useContext, useState } from "react";
-import { AuthContext } from "../Contexts/AuthContext";
 import Status from "../img/status.png";
 import WhiteStatus from "../img/status-white.png";
 import MoreWhite from "../img/more-white.png";
 import defaultDP from "../img/user.png";
 import More from "../img/more.png";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signOut } from "firebase/auth";
-import { mobileDeviceChatContext } from "../Contexts/ShowMobileDeviceChat";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "../store/user/user.selector";
+import { selectCurrentWindowSize } from "../store/window-size/window.selector";
+import { signOutStart } from "../store/user/user.action";
+
 const Navbar = ({ showUserProfile }) => {
   const navigate = useNavigate();
-  const { width } = useContext(mobileDeviceChatContext);
-  const { currentUser } = useContext(AuthContext);
+  const currentUser = useSelector(selectCurrentUser);
+  const { isMobileDevice } = useSelector(selectCurrentWindowSize);
   const [showSignOut, setShowSignOut] = useState(false);
+  const dispatch = useDispatch();
   const handleSignOut = () => {
-    const auth = getAuth();
-    signOut(auth);
+    dispatch(signOutStart());
     navigate("login");
   };
-
   return (
     <nav className="navbar">
       <div style={{ position: "relative" }}>
@@ -49,7 +50,7 @@ const Navbar = ({ showUserProfile }) => {
       <div
         onClick={handleSignOut}
         className={`logout-div ${showSignOut ? "" : "hidden"} ${
-          width <= 600 ? "small-signout" : ""
+          isMobileDevice ? "small-signout" : ""
         }`}
       >
         <p>Sign Out</p>

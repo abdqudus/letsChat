@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Send from "../img/send-message.png";
 import ImgPreviewTemplate from "./imgPreviewTemplate";
 
-import { selectedImgContext } from "../Contexts/SelectedImgContext";
 import getMsgAndImg, { clearLocalStorage } from "../utils/getMsgAndImg";
 import {
   getDownloadURL,
@@ -10,8 +9,6 @@ import {
   ref,
   uploadString,
 } from "firebase/storage";
-import { AuthContext } from "../Contexts/AuthContext";
-import { ChatContext } from "../Contexts/ChatContext";
 import {
   Timestamp,
   arrayUnion,
@@ -22,12 +19,17 @@ import {
 import { firestoredb } from "..";
 import { v4 as uuid } from "uuid";
 import ImgPreviewSmall from "./ImgPreviewSmall";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "../store/user/user.selector";
+import { selectContactSlice } from "../store/contacts/contact-selector";
+import { selectedImgSlice } from "../store/selectedImg/selected-img-selector";
+import { showSelectedImg } from "../store/selectedImg/selected-img-actions";
 const SelectedImg = () => {
-  const { currentUser } = useContext(AuthContext);
-  const { data } = useContext(ChatContext);
+  const currentUser = useSelector(selectCurrentUser);
+  const data = useSelector(selectContactSlice);
   const [imgId, setImgID] = useState(0);
-  const { img } = useContext(selectedImgContext).state;
-  const { dispatch } = useContext(selectedImgContext);
+  const { img } = useSelector(selectedImgSlice);
+  const dispatch = useDispatch();
   const sortedImg = img.sort((a, b) => a.index - b.index);
   useEffect(() => {
     sortedImg.forEach((i, ind) => {
@@ -50,12 +52,8 @@ const SelectedImg = () => {
   const handleSend = async () => {
     const msgData = getMsgAndImg();
     clearLocalStorage();
-    console.log(msgData);
     const storage = getStorage();
-    dispatch({
-      type: "show selected image",
-      payload: false,
-    });
+    dispatch(showSelectedImg(false));
     for (const msg of msgData) {
       try {
         const fileRef = ref(
@@ -73,7 +71,7 @@ const SelectedImg = () => {
             url,
           }),
         });
-        await updateDoc(doc(firestoredb, "userChats", data.user.uid), {
+        await updateDoc(doc(firestoredb, "userChats", data.contact.uid), {
           [data.chatId + ".lastMessage"]: {
             text: msg.text,
             url,

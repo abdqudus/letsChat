@@ -4,30 +4,34 @@ import Smiley from "../img/happy (1).png";
 import Attach from "../img/attach-file.png";
 import Send from "../img/send-message.png";
 import { v4 as uuid } from "uuid";
-import { AuthContext } from "../Contexts/AuthContext";
-import { ChatContext } from "../Contexts/ChatContext";
 import {
   Timestamp,
   arrayUnion,
   doc,
   serverTimestamp,
+  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { firestoredb } from "../index";
-import { showEmojiContext } from "../Contexts/ShowEmojiContext";
-import { selectedImgContext } from "../Contexts/SelectedImgContext";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "../store/user/user.selector";
+import { selectContactSlice } from "../store/contacts/contact-selector";
+import {
+  selectedImg,
+  showSelectedImg,
+} from "../store/selectedImg/selected-img-actions";
+import { emojiAction } from "../store/emoji/emoji-actions";
 const Input = ({ emoji }) => {
   const imgArref = useRef([]);
   const [dataurl, setDataUrl] = useState([]);
   const [cancel, setCancel] = useState(false);
-  const imgDispatch = useContext(selectedImgContext).dispatch;
-  const { dispatch } = useContext(showEmojiContext);
+  const dispatch = useDispatch();
   const [text, setText] = useState("");
-  const { currentUser } = useContext(AuthContext);
-  const { data } = useContext(ChatContext);
+  const currentUser = useSelector(selectCurrentUser);
+  const data = useSelector(selectContactSlice);
   const textRef = useRef(null);
   const handleShowEmoji = () => {
-    dispatch({ type: "show emoji", payload: true });
+    dispatch(emojiAction(true));
     setCancel(true);
   };
   const handleSelectImg = async (e) => {
@@ -45,10 +49,8 @@ const Input = ({ emoji }) => {
         "images",
         JSON.stringify(dataurl.sort((a, b) => a.index - b.index))
       );
-      imgDispatch({
-        type: "show selected image",
-        payload: { showSelectedImg: true, img: dataurl },
-      });
+      dispatch(showSelectedImg(true));
+      dispatch(selectedImg(dataurl));
     }
   }, [dataurl.length]);
 
@@ -63,7 +65,7 @@ const Input = ({ emoji }) => {
   }
 
   const hideCancel = () => {
-    dispatch({ type: "show emoji", payload: false });
+    dispatch(emojiAction(false));
     setCancel(false);
   };
   const handleSend = async () => {
@@ -79,7 +81,7 @@ const Input = ({ emoji }) => {
             date: Timestamp.now(),
           }),
         });
-        await updateDoc(doc(firestoredb, "userChats", data.user.uid), {
+        await updateDoc(doc(firestoredb, "userChats", data.contact.uid), {
           [data.chatId + ".lastMessage"]: {
             text: textRef.current,
           },

@@ -15,18 +15,15 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { firestoredb } from "../index";
-import { useContext } from "react";
-import { AuthContext } from "../Contexts/AuthContext";
-import { ChatContext } from "../Contexts/ChatContext";
-import { showChatContext } from "../Contexts/ShowChatContext";
 import defaultDP from "../img/user.png";
-import { mobileDeviceChatContext } from "../Contexts/ShowMobileDeviceChat";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "../store/user/user.selector";
+import { selectContact } from "../store/contacts/contact-actions";
+import { showSmallScreenMessage } from "../store/window-size/window.action";
 const SearchPanel = () => {
-  const { currentUser } = useContext(AuthContext);
-  const { dispatch } = useContext(ChatContext);
-  const secondDispatch = useContext(showChatContext).dispatch;
+  const currentUser = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
   const [username, setUsername] = useState([]);
-  const { setShowMobileChat, width } = useContext(mobileDeviceChatContext);
   const user = useRef(null);
   const handleSearch = async (e) => {
     if (e.target.value) {
@@ -50,39 +47,40 @@ const SearchPanel = () => {
   const handleSelect = async (e) => {
     const element = e.target.id ? e.target : e.target.parentElement;
     user.current = username.find((u) => u.uid === element.id);
-    dispatch({ type: "change_user", payload: user.current });
-    secondDispatch({ type: "show chat", payload: true });
-    if (width <= 600) {
-      setShowMobileChat(true);
-    }
+    const chatId =
+      currentUser.uid > user.current.uid
+        ? currentUser.uid + "@" + user.current.uid
+        : user.current.uid + "@" + currentUser.uid;
+    let contactInfo = user.current;
+    dispatch(selectContact({ contactInfo, chatId }));
+    dispatch(showSmallScreenMessage());
     setUsername([user.current]);
 
-    const combinedId =
-      currentUser.uid > user.current.uid
-        ? currentUser.uid + user.current.uid
-        : user.current.uid + currentUser.uid;
+    // if the have no chat previously, the chatId becomes combinedId for both people
     try {
-      const res = await getDoc(doc(firestoredb, "chats", combinedId));
+      const res = await getDoc(doc(firestoredb, "chats", chatId));
       if (!res.exists() && currentUser.uid !== user.current.uid) {
-        await setDoc(doc(firestoredb, "chats", combinedId), { messages: [] });
+        await setDoc(doc(firestoredb, "chats", chatId), { messages: [] });
         await updateDoc(doc(firestoredb, "userChats", user.current.uid), {
-          [combinedId + ".userInfo"]: {
+          [chatId + ".userInfo"]: {
             uid: currentUser.uid,
             displayName: currentUser.displayName,
             photoURL: currentUser.photoURL,
           },
-          [combinedId + ".date"]: serverTimestamp(),
+          [chatId + ".date"]: serverTimestamp(),
         });
         await updateDoc(doc(firestoredb, "userChats", currentUser.uid), {
-          [combinedId + ".userInfo"]: {
+          [chatId + ".userInfo"]: {
             uid: user.current.uid,
             displayName: user.current.displayName,
             photoURL: user.current.photoURL,
           },
-          [combinedId + ".date"]: serverTimestamp(),
+          [chatId + ".date"]: serverTimestamp(),
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -107,7 +105,7 @@ const SearchPanel = () => {
           <h4>{u.displayName}</h4>
         </div>
       ))}
-      <Contacts />
+      {/* <Contacts /> */}
     </>
   );
 };

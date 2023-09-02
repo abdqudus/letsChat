@@ -1,22 +1,25 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Navbar from "./Navbar";
 import SearchPanel from "./SearchPanel";
-import { mobileDeviceChatContext } from "../Contexts/ShowMobileDeviceChat";
 import Profile from "../Components/Profile";
+import { useSelector } from "react-redux";
+import { selectCurrentWindowSize } from "../store/window-size/window.selector";
+import { Contacts } from "./Contacts";
 
 const Sidebar = ({ toggleChatOn }) => {
+  const { isMobileDevice } = useSelector(selectCurrentWindowSize);
   const [showProfile, setShowProfile] = useState(false);
-  const { width } = useContext(mobileDeviceChatContext);
   const showUserProfile = (boolean) => {
     setShowProfile(boolean);
   };
-  const size = width <= 600 ? "small" : "big";
+  const size = isMobileDevice ? "small" : "big";
   return (
     <>
       <aside className={`sidebar ${size}`}>
         {!showProfile && <Navbar showUserProfile={showUserProfile} />}
         {!showProfile && <SearchPanel toggleChatOn={toggleChatOn} />}
         {showProfile && <Profile showUserProfile={showUserProfile} />}
+        <Contacts />
       </aside>
     </>
   );

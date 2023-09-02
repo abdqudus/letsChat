@@ -5,9 +5,24 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignUp from "./pages/SignUp";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import BadConnection from "./pages/BadConnection";
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import ForgotPassword from "./pages/ForgotPassword";
+import { useDispatch, useSelector } from "react-redux";
+import { checkUserSession } from "./store/user/user.action";
+import { windowResize } from "./store/window-size/window.action";
+import { selectCurrentWindowSize } from "./store/window-size/window.selector";
 export default function App() {
+  const dispatch = useDispatch();
+  dispatch(checkUserSession());
+  const dispatchSize = () => {
+    dispatch(windowResize());
+  };
+  useEffect(() => {
+    window.addEventListener("resize", dispatchSize);
+    return () => {
+      window.removeEventListener("resize", dispatchSize);
+    };
+  });
   return (
     <>
       <BrowserRouter>

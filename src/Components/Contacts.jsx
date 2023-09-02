@@ -1,23 +1,22 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ChatContext } from "../Contexts/ChatContext";
-import { AuthContext } from "../Contexts/AuthContext";
-import { doc, onSnapshot } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 import { firestoredb } from "../index";
-import { showChatContext } from "../Contexts/ShowChatContext";
 import { Navigate } from "react-router-dom";
-import { mobileDeviceChatContext } from "../Contexts/ShowMobileDeviceChat";
 import defaultDP from "../img/user.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCameraRetro } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "../store/user/user.selector";
+import { showSmallScreenMessage } from "../store/window-size/window.action";
+import { selectContact } from "../store/contacts/contact-actions";
 export const Contacts = () => {
   const photo = <FontAwesomeIcon icon={faCameraRetro} />;
-  const { dispatch } = useContext(ChatContext);
-  const secondDispatch = useContext(showChatContext).dispatch;
+  const dispatch = useDispatch();
+
   const [chats, setChats] = useState([]);
-  const { currentUser } = useContext(AuthContext);
-  const { setShowMobileChat, width } = useContext(mobileDeviceChatContext);
+  const currentUser = useSelector(selectCurrentUser);
   useEffect(() => {
-    const getChats = () => {
+    const getChats = async () => {
       const unsub = onSnapshot(
         doc(firestoredb, "userChats", currentUser.uid),
         (doc) => {
@@ -30,12 +29,14 @@ export const Contacts = () => {
     };
     currentUser.uid && getChats();
   }, [currentUser.uid]);
-  const handleSelect = (info) => {
-    dispatch({ type: "change_user", payload: info });
-    secondDispatch({ type: "show chat", payload: true });
-    if (width <= 600) {
-      setShowMobileChat(true);
-    }
+
+  const handleSelect = (contactInfo) => {
+    const chatId =
+      currentUser.uid > contactInfo.uid
+        ? currentUser.uid + "@" + contactInfo.uid
+        : contactInfo.uid + "@" + currentUser.uid;
+    dispatch(showSmallScreenMessage());
+    dispatch(selectContact({ contactInfo, chatId }));
   };
 
   if (chats) {
@@ -43,7 +44,9 @@ export const Contacts = () => {
       <div className="contacts-panel">
         {Object.entries(chats)
           ?.sort((a, b) => b[1].date - a[1].date) //this ensures the contacts are arranged in terms of latest message
-          .filter((chat) => chat[1].lastMessage) //this ensures that the contacts rendered are only those the user has chatted with
+          .filter((chat) => {
+            return chat[1].lastMessage;
+          }) //this ensures that the contacts rendered are only those the user has chatted with
           .map((chat) => (
             <div
               className="contacts"
@@ -83,5 +86,5 @@ export const Contacts = () => {
       </div>
     );
   }
-  return <Navigate to="bad-network" />;
+  return <div className="contacts-panel">Start a new chat</div>;
 };

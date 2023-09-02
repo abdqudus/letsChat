@@ -11,24 +11,27 @@ import {
   getDatabase,
 } from "firebase/database";
 import BackArrow from "../img/back.png";
-import { ChatContext } from "../Contexts/ChatContext";
 import { database as db } from "..";
-import { AuthContext } from "../Contexts/AuthContext";
 import dateChecker from "../utils/dateChecker";
-import { mobileDeviceChatContext } from "../Contexts/ShowMobileDeviceChat";
 import defaultDP from "../img/user.png";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "../store/user/user.selector";
+import { selectCurrentWindowSize } from "../store/window-size/window.selector";
+import { showSmallScreenMessage } from "../store/window-size/window.action";
+import { selectContactSlice } from "../store/contacts/contact-selector";
 const ChatNav = () => {
   const [status, setStatus] = useState({ isOnline: false, lastSeen: null });
-  const { data } = useContext(ChatContext);
-  const { currentUser } = useContext(AuthContext);
+  const data = useSelector(selectContactSlice);
+  const currentUser = useSelector(selectCurrentUser);
   const statusRef = useRef({});
-  const friendStatusRef = ref(db, `users/${data.user.uid}`);
+  const friendStatusRef = ref(db, `users/${data.contact.uid}`);
   const connectedRef = ref(db, ".info/connected");
   const lastOnlineRef = ref(db, `users/${currentUser.uid}/lastOnline`);
   const isOnlineRef = ref(db, `users/${currentUser.uid}/isOnline`);
-  const { setShowMobileChat } = useContext(mobileDeviceChatContext);
+  const { isMobileDevice } = useSelector(selectCurrentWindowSize);
+  const dispatch = useDispatch();
   const handleClick = () => {
-    setShowMobileChat(false);
+    dispatch(showSmallScreenMessage());
   };
   useEffect(() => {
     if (data.chatId !== "null") {
@@ -50,20 +53,23 @@ const ChatNav = () => {
     }
   }, []);
   onValue(friendStatusRef, (snapshot) => {
-    if (snapshot.val().isOnline) {
-      statusRef.current = { isOnline: snapshot.val().isOnline };
+    if (snapshot.val()?.isOnline) {
+      statusRef.current = { isOnline: snapshot.val()?.isOnline };
     } else {
-      const date = new Date(snapshot.val().lastOnline).toLocaleString("en-US", {
-        hour12: true,
-        timeStyle: "short",
-        dateStyle: "medium",
-      });
+      const date = new Date(snapshot.val()?.lastOnline).toLocaleString(
+        "en-US",
+        {
+          hour12: true,
+          timeStyle: "short",
+          dateStyle: "medium",
+        }
+      );
       statusRef.current = { isOnline: false, lastSeen: date };
     }
   });
   useEffect(() => {
     const dbRef = ref(getDatabase());
-    get(child(dbRef, `users/${data.user.uid}`))
+    get(child(dbRef, `users/${data.contact.uid}`))
       .then((snapshot) => {
         if (snapshot.exists()) {
           setStatus(snapshot.val());
@@ -72,7 +78,7 @@ const ChatNav = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, [statusRef.current.isOnline, data.user.uid]);
+  }, [statusRef.current.isOnline, data.contact.uid]);
   let lastSeen = statusRef.current?.lastSeen;
   let lastSeenString;
   if (lastSeen) {
@@ -96,10 +102,10 @@ const ChatNav = () => {
           />
           <img
             className="dp"
-            src={data.user.photoURL ? data.user.photoURL : defaultDP}
+            src={data.contact.photoURL ? data.contact.photoURL : defaultDP}
             alt="display picture"
           />
-          <h3>{data.user.displayName}</h3>
+          <h3>{data.contact.displayName}</h3>
           {statusRef.current.isOnline && <span> online</span>}
           {lastSeenString && <span> {lastSeenString}</span>}
         </div>

@@ -1,11 +1,10 @@
 import React from "react";
-import { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "../Contexts/AuthContext";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../store/user/user.selector";
 
 const ProtectedRoute = ({ children }) => {
-  const { currentUser } = useContext(AuthContext);
-
+  const currentUser = useSelector(selectCurrentUser);
   if (currentUser) {
     return children;
   }

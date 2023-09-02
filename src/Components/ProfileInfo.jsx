@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Back from "../img/back.png";
 import Edit from "../img/edit.png";
 import CheckMark from "../img/checkmark.png";
@@ -6,10 +6,11 @@ import Emoji from "../img/happy (1).png";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
-import { AuthContext } from "../Contexts/AuthContext";
 import { firestoredb } from "..";
 import defaultDP from "../img/user.png";
 import removeDp from "../utils/removeDp";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../store/user/user.selector";
 const ProfileInfo = ({
   data,
   editUsername,
@@ -21,7 +22,7 @@ const ProfileInfo = ({
   showUserProfile,
 }) => {
   const [showOptions, setShowOptions] = useState(false);
-  const { currentUser } = useContext(AuthContext);
+  const currentUser = useSelector(selectCurrentUser);
   const [dpUrl, setDpUrl] = useState(null);
 
   const handleRemoveDp = () => {

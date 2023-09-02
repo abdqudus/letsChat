@@ -4,29 +4,49 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../index";
 import hide from "../img/hide.png";
 import show from "../img/view.png";
+import { useDispatch, useSelector } from "react-redux";
+import { signInStart } from "../store/user/user.action";
+import { store } from "../store/store";
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState({ email: "", password: "" });
   const [err, setErr] = useState("");
   const [isSigningIn, setIsSigningIn] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSigningIn(true);
     const { email, password } = user;
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      dispatch(signInStart(email, password));
+      const authAction = await waitForAuthSuccess();
       navigate("/");
     } catch (error) {
-      console.log(error.message);
       setErr(error.message);
-    } finally {
-      setIsSigningIn(false);
     }
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
+  };
+  // Utility function to return a promise that resolves when authentication is successful
+  const waitForAuthSuccess = () => {
+    return new Promise((resolve, reject) => {
+      const unsubscribe = store.subscribe(() => {
+        const { user } = store.getState();
+        if (user.currentUser) {
+          unsubscribe();
+          resolve(user); // You can pass user data or any relevant data as needed
+        }
+        if (user.error) {
+          unsubscribe();
+          setIsSigningIn(false);
+          reject(new Error(user.error));
+        }
+      });
+    });
   };
   return (
     <div className="login-wrapper">

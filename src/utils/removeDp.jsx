@@ -4,8 +4,6 @@ import { firestoredb } from "..";
 
 const removeDp = async (userCredential) => {
   const { displayName } = userCredential;
-  console.log(displayName);
-  console.log(userCredential);
   await updateProfile(userCredential, {
     displayName,
     photoURL: "",

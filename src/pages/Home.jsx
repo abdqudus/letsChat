@@ -1,16 +1,24 @@
-import React, { useContext } from "react";
+import React from "react";
 import Sidebar from "../Components/Sidebar";
 import ChatInterface from "../Components/ChatInterface";
-import { AuthContext } from "../Contexts/AuthContext";
-import { mobileDeviceChatContext } from "../Contexts/ShowMobileDeviceChat";
 import { Link } from "react-router-dom";
 import { sendEmailVerification } from "firebase/auth";
+import { selectCurrentUser } from "../store/user/user.selector.js";
+import { useSelector } from "react-redux";
+import Login from "./Login";
+import { selectCurrentWindowSize } from "../store/window-size/window.selector";
 const Home = () => {
-  const { currentUser } = useContext(AuthContext);
-  const { showMobileChat } = useContext(mobileDeviceChatContext);
+  const currentUser = useSelector(selectCurrentUser);
+  const { isMobileDevice, showMobileMessages } = useSelector(
+    selectCurrentWindowSize
+  );
   const sendVerification = () => {
     sendEmailVerification(currentUser);
   };
+  if (currentUser === null) {
+    return <Login />;
+  }
+
   if (
     currentUser.email !== "undefined" &&
     currentUser.emailVerified === false
@@ -33,10 +41,17 @@ const Home = () => {
     );
   }
   if (currentUser.emailVerified) {
+    if (isMobileDevice) {
+      return (
+        <div className="homepage-wrapper">
+          <div>{showMobileMessages ? <ChatInterface /> : <Sidebar />}</div>
+        </div>
+      );
+    }
     return (
       <div className="homepage-wrapper">
         <div>
-          {!showMobileChat && <Sidebar />}
+          <Sidebar />
           <ChatInterface />
         </div>
       </div>

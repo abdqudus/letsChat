@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Close from "../img/close.png";
 import { clearLocalStorage } from "../utils/getMsgAndImg";
-const ImgPreviewTemplate = ({ url, dispatch, index }) => {
+import { useDispatch } from "react-redux";
+import { showSelectedImg } from "../store/selectedImg/selected-img-actions";
+const ImgPreviewTemplate = ({ url, index }) => {
+  const dispatch = useDispatch();
   const initialMsg = localStorage.getItem(`msg-${index}`);
   const [caption, setCaption] = useState(initialMsg ? initialMsg : "");
   useEffect(() => {
@@ -13,10 +16,7 @@ const ImgPreviewTemplate = ({ url, dispatch, index }) => {
         onClick={() => {
           localStorage.removeItem(`msg-${index}`);
           clearLocalStorage();
-          dispatch({
-            type: "show selected image",
-            payload: false,
-          });
+          dispatch(showSelectedImg(false));
         }}
         className="close-btn"
         src={Close}

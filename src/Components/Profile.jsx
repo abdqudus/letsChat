@@ -1,16 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { AuthContext } from "../Contexts/AuthContext";
 import { firestoredb } from "..";
 import { useRef } from "react";
 import ProfileInfo from "./ProfileInfo";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../store/user/user.selector";
 const Profile = ({ showUserProfile }) => {
   const [data, setData] = useState(null);
 
   const [editUsername, setEditUsername] = useState(false);
   const [editAbout, setEditAbout] = useState(false);
   const infoRef = useRef({});
-  const { currentUser } = useContext(AuthContext);
+  const currentUser = useSelector(selectCurrentUser);
   const currentUserRef = useRef(null);
   const getData = async () => {
     const docRef = doc(firestoredb, "users", currentUser.uid);
