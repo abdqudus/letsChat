@@ -122,6 +122,7 @@ const Input = ({ emoji }) => {
         <img src={Attach} alt="attachments" />
       </label>
       <textarea
+        onClick={(e) => e.target.focus()}
         onChange={(e) => setText(e.target.value)}
         type="text"
         name="text"
