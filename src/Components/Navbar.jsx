@@ -20,6 +20,7 @@ const Navbar = ({ showUserProfile }) => {
     dispatch(signOutStart());
     navigate("login");
   };
+  console.log(currentUser);
   return (
     <nav className="navbar">
       <div style={{ position: "relative" }}>

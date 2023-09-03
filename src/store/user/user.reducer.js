@@ -1,6 +1,7 @@
+import { faL } from "@fortawesome/free-solid-svg-icons";
 import { USER_ACTION_TYPES } from "./user.types";
 
-const INITIAL_STATE = {
+export const INITIAL_STATE = {
   currentUser: null,
   isLoading: false,
   error: null,
@@ -12,12 +13,13 @@ export const userReducer = (state = INITIAL_STATE, action) => {
   switch (type) {
     case USER_ACTION_TYPES.SET_CURRENT_USER:
       return { ...state, currentUser: payload, isLoading: false };
-
+    case USER_ACTION_TYPES.REINITIALIZE_USER:
+      return payload;
     case USER_ACTION_TYPES.SIGN_IN_START:
       return { ...state, isLoading: true };
     case USER_ACTION_TYPES.SIGN_IN_FAILED:
     case USER_ACTION_TYPES.SIGN_UP_FAILED:
-      return { ...state, error: payload };
+      return { ...state, error: payload, isLoading: false };
     case USER_ACTION_TYPES.SIGN_OUT_SUCCESS:
       return { ...state, currentUser: null };
     default:

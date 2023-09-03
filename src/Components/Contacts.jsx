@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { firestoredb } from "../index";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import defaultDP from "../img/user.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCameraRetro } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +12,7 @@ import { selectContact } from "../store/contacts/contact-actions";
 export const Contacts = () => {
   const photo = <FontAwesomeIcon icon={faCameraRetro} />;
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [chats, setChats] = useState([]);
   const currentUser = useSelector(selectCurrentUser);
   useEffect(() => {
@@ -85,6 +85,7 @@ export const Contacts = () => {
           ))}
       </div>
     );
+  } else {
+    navigate("bad-network");
   }
-  return <div className="contacts-panel">Start a new chat</div>;
 };

@@ -4,6 +4,7 @@ import Add from "../img/addAvatar.png";
 import { storage } from "../index";
 import { auth } from "../index";
 import { firestoredb } from "../index";
+import { INITIAL_STATE } from "../store/user/user.reducer";
 import {
   createUserWithEmailAndPassword,
   updateProfile,
@@ -13,7 +14,11 @@ import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import Loader from "../Components/Loader";
 import { setDoc, doc } from "firebase/firestore";
 import setDatabase from "../utils/setDatabase";
+import { useDispatch } from "react-redux";
+import { ReInitializeUser, signUpStart } from "../store/user/user.action";
+import { waitForAuthResponse } from "../utils/awaitAuthResponse";
 export default function SignUp() {
+  const dispatch = useDispatch();
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [err, setErr] = useState("");
   const navigate = useNavigate();
@@ -30,48 +35,11 @@ export default function SignUp() {
     setIsSigningUp(true);
     const { email, password, displayName } = user;
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      if (img) {
-        const imgRef = ref(
-          storage,
-          `images/${userCredential.user.uid}/${displayName}`
-        );
-        await uploadBytes(imgRef, img);
-        const url = await getDownloadURL(imgRef);
-        await updateProfile(userCredential.user, {
-          displayName,
-          photoURL: url,
-        });
-        await setDoc(doc(firestoredb, "users", userCredential.user.uid), {
-          about: "Hey there, i'm using chatApp",
-          uid: userCredential.user.uid,
-          displayName,
-          email,
-          photoURL: url,
-        });
-      } else {
-        await updateProfile(userCredential.user, {
-          displayName,
-          photoURL: "",
-        });
-        await setDoc(doc(firestoredb, "users", userCredential.user.uid), {
-          about: "Hey there, i'm using chatApp",
-          uid: userCredential.user.uid,
-          displayName,
-          email,
-          photoURL: "",
-        });
-      }
-
-      await setDoc(doc(firestoredb, "userChats", userCredential.user.uid), {});
-      setDatabase(userCredential.user.uid, displayName);
-      if (!userCredential.user.emailVerified) {
-        sendEmailVerification(userCredential.user);
-      }
+      dispatch(ReInitializeUser(INITIAL_STATE));
+      dispatch(signUpStart(email, password, displayName, img));
+      const a = await waitForAuthResponse();
+      console.log(a);
+      setIsSigningUp(false);
       navigate("/");
     } catch (error) {
       setErr(error.message);
@@ -79,7 +47,6 @@ export default function SignUp() {
       setIsSigningUp(false);
     }
   };
-
   const handleChange = (e) => {
     console.log(e.target.value);
     const { name, value } = e.target;
@@ -126,6 +93,11 @@ export default function SignUp() {
             value={user.password}
             onChange={handleChange}
           />
+          {err.includes("auth/weak-password") && (
+            <p style={{ color: "red" }}>
+              Password should be at least 6 characters
+            </p>
+          )}
           <input
             type="file"
             accept="image/*"
@@ -151,7 +123,7 @@ export default function SignUp() {
               src={user.url}
             />
           )}
-          {err.includes("email-already-in-use") && (
+          {err.includes("auth/email-already-in-use") && (
             <p style={{ color: "red" }}>
               {`This email has already been used, Do you wish to ${" "}`}
               <Link to="/login"> Sign in?</Link>{" "}

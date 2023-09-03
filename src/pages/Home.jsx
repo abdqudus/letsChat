@@ -24,7 +24,7 @@ const Home = () => {
     currentUser.emailVerified === false
   ) {
     return (
-      <div>
+      <div className="verification-prompt-div">
         <h4>Hey there!, there's just one more step to go.</h4>
         <p>
           A verification link has been sent to your email. Kindly verify your

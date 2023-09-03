@@ -5,8 +5,10 @@ import { auth } from "../index";
 import hide from "../img/hide.png";
 import show from "../img/view.png";
 import { useDispatch, useSelector } from "react-redux";
-import { signInStart } from "../store/user/user.action";
+import { ReInitializeUser, signInStart } from "../store/user/user.action";
 import { store } from "../store/store";
+import { waitForAuthResponse } from "../utils/awaitAuthResponse";
+import { INITIAL_STATE } from "../store/user/user.reducer";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,34 +22,22 @@ const Login = () => {
     setIsSigningIn(true);
     const { email, password } = user;
     try {
+      dispatch(ReInitializeUser(INITIAL_STATE));
       dispatch(signInStart(email, password));
-      const authAction = await waitForAuthSuccess();
+      await waitForAuthResponse();
       navigate("/");
     } catch (error) {
+      setIsSigningIn(false);
       setErr(error.message);
+    } finally {
+      setIsSigningIn(false);
     }
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
   };
-  // Utility function to return a promise that resolves when authentication is successful
-  const waitForAuthSuccess = () => {
-    return new Promise((resolve, reject) => {
-      const unsubscribe = store.subscribe(() => {
-        const { user } = store.getState();
-        if (user.currentUser) {
-          unsubscribe();
-          resolve(user); // You can pass user data or any relevant data as needed
-        }
-        if (user.error) {
-          unsubscribe();
-          setIsSigningIn(false);
-          reject(new Error(user.error));
-        }
-      });
-    });
-  };
+
   return (
     <div className="login-wrapper">
       <div className="form-div">

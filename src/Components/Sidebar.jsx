@@ -19,7 +19,7 @@ const Sidebar = ({ toggleChatOn }) => {
         {!showProfile && <Navbar showUserProfile={showUserProfile} />}
         {!showProfile && <SearchPanel toggleChatOn={toggleChatOn} />}
         {showProfile && <Profile showUserProfile={showUserProfile} />}
-        <Contacts />
+        {!showProfile && <Contacts />}
       </aside>
     </>
   );
