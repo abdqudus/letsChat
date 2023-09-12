@@ -71,7 +71,7 @@ const SelectedImg = () => {
             url,
           }),
         });
-        await updateDoc(doc(firestoredb, "userChats", data.contact.uid), {
+        await updateDoc(doc(firestoredb, "userChats", data.contactInfo.uid), {
           [data.chatId + ".lastMessage"]: {
             text: msg.text,
             url,

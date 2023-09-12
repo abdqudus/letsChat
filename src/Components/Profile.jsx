@@ -13,10 +13,12 @@ const Profile = ({ showUserProfile }) => {
   const infoRef = useRef({});
   const currentUser = useSelector(selectCurrentUser);
   const currentUserRef = useRef(null);
+
   const getData = async () => {
     const docRef = doc(firestoredb, "users", currentUser.uid);
     const docSnap = await getDoc(docRef);
     const { displayName, photoURL, about } = docSnap.data();
+    // console.log(docSnap.data());
     setData({ displayName, photoURL, about });
     currentUserRef.current = currentUser.uid;
     infoRef.current = { username: docSnap.data().displayName, about };

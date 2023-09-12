@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentWindowSize } from "../store/window-size/window.selector";
 import { Contacts } from "./Contacts";
 
-const Sidebar = ({ toggleChatOn }) => {
+const Sidebar = () => {
   const { isMobileDevice } = useSelector(selectCurrentWindowSize);
   const [showProfile, setShowProfile] = useState(false);
   const showUserProfile = (boolean) => {
@@ -17,7 +17,7 @@ const Sidebar = ({ toggleChatOn }) => {
     <>
       <aside className={`sidebar ${size}`}>
         {!showProfile && <Navbar showUserProfile={showUserProfile} />}
-        {!showProfile && <SearchPanel toggleChatOn={toggleChatOn} />}
+        {!showProfile && <SearchPanel />}
         {showProfile && <Profile showUserProfile={showUserProfile} />}
         {!showProfile && <Contacts />}
       </aside>

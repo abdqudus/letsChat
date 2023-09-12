@@ -1,45 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../Components/Sidebar";
 import ChatInterface from "../Components/ChatInterface";
-import { Link } from "react-router-dom";
-import { sendEmailVerification } from "firebase/auth";
 import { selectCurrentUser } from "../store/user/user.selector.js";
-import { useSelector } from "react-redux";
-import Login from "./Login";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentWindowSize } from "../store/window-size/window.selector";
+import { doc, onSnapshot } from "firebase/firestore";
+import { firestoredb } from "..";
+import { getUserChats } from "../utils/getUserChats";
+import { selectUserChats } from "../store/user-chats/user-chats.actions";
+import Verification from "./Verification";
 const Home = () => {
   const currentUser = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
+  const userChatsRef = doc(firestoredb, "userChats", currentUser.uid);
+  useEffect(() => {
+    const onNext = async (doc) => {
+      const contactData = await getUserChats(doc.data());
+      dispatch(selectUserChats(contactData));
+    };
+    const getChats = async () => {
+      const unsub = onSnapshot(userChatsRef, onNext);
+      return () => {
+        unsub();
+      };
+    };
+    currentUser.uid && getChats();
+  }, [currentUser.uid]);
   const { isMobileDevice, showMobileMessages } = useSelector(
     selectCurrentWindowSize
   );
-  const sendVerification = () => {
-    sendEmailVerification(currentUser);
-  };
-  if (currentUser === null) {
-    return <Login />;
-  }
-
   if (
     currentUser.email !== "undefined" &&
     currentUser.emailVerified === false
   ) {
-    return (
-      <div className="verification-prompt-div">
-        <h4>Hey there!, there's just one more step to go.</h4>
-        <p>
-          A verification link has been sent to your email. Kindly verify your
-          email address by clicking on the link
-        </p>
-        <p>
-          If you dont find it in your inbox, try checking your spam messages
-        </p>
-        <p>Didn't receive email? </p>
-        <Link to=".">
-          <p onClick={sendVerification}> click to resend verification email</p>
-        </Link>
-      </div>
-    );
+    return <Verification />;
   }
+
   if (currentUser.emailVerified) {
     if (isMobileDevice) {
       return (

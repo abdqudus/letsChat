@@ -5,7 +5,7 @@ import { auth } from "../index";
 import hide from "../img/hide.png";
 import show from "../img/view.png";
 import { useDispatch, useSelector } from "react-redux";
-import { ReInitializeUser, signInStart } from "../store/user/user.action";
+import { reInitializeUser, signInStart } from "../store/user/user.action";
 import { store } from "../store/store";
 import { waitForAuthResponse } from "../utils/awaitAuthResponse";
 import { INITIAL_STATE } from "../store/user/user.reducer";
@@ -22,7 +22,7 @@ const Login = () => {
     setIsSigningIn(true);
     const { email, password } = user;
     try {
-      dispatch(ReInitializeUser(INITIAL_STATE));
+      dispatch(reInitializeUser(INITIAL_STATE));
       dispatch(signInStart(email, password));
       await waitForAuthResponse();
       navigate("/");

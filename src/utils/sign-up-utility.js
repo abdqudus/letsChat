@@ -10,7 +10,6 @@ import setDatabase from "./setDatabase";
 
 export const signUpUtility = async (email, password, displayName, img) => {
   try {
-    console.log(email, password, displayName, img);
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -35,7 +34,6 @@ export const signUpUtility = async (email, password, displayName, img) => {
         photoURL: url,
       });
     } else {
-      console.log("none");
       await updateProfile(userCredential.user, {
         displayName,
         photoURL: "",

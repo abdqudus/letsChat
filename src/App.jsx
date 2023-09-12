@@ -4,6 +4,7 @@ import React, { Suspense, lazy, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { checkUserSession } from "./store/user/user.action";
 import { windowResize } from "./store/window-size/window.action";
+import store from "../src/store/store";
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const SignUp = lazy(() => import("./pages/SignUp"));
@@ -11,6 +12,7 @@ const BadConnection = lazy(() => import("./pages/BadConnection"));
 const ProtectedRoute = lazy(() => import("./pages/ProtectedRoute"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 export default function App() {
+  console.log(store);
   const dispatch = useDispatch();
   dispatch(checkUserSession());
   const dispatchSize = () => {
@@ -22,6 +24,7 @@ export default function App() {
       window.removeEventListener("resize", dispatchSize);
     };
   });
+
   return (
     <>
       <BrowserRouter>

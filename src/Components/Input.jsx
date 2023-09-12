@@ -20,7 +20,7 @@ import {
   selectedImg,
   showSelectedImg,
 } from "../store/selectedImg/selected-img-actions";
-import { emojiAction } from "../store/emoji/emoji-actions";
+import { selectEmoji } from "../store/emoji/emoji-actions";
 const Input = ({ emoji }) => {
   const imgArref = useRef([]);
   const [dataurl, setDataUrl] = useState([]);
@@ -31,7 +31,7 @@ const Input = ({ emoji }) => {
   const data = useSelector(selectContactSlice);
   const textRef = useRef(null);
   const handleShowEmoji = () => {
-    dispatch(emojiAction(true));
+    dispatch(selectEmoji(true));
     setCancel(true);
   };
   const handleSelectImg = async (e) => {
@@ -65,13 +65,14 @@ const Input = ({ emoji }) => {
   }
 
   const hideCancel = () => {
-    dispatch(emojiAction(false));
+    dispatch(selectEmoji(false));
     setCancel(false);
   };
   const handleSend = async () => {
     if (text) {
       textRef.current = text;
       setText("");
+      // console.log(data);
       try {
         await updateDoc(doc(firestoredb, "chats", data.chatId), {
           messages: arrayUnion({
@@ -81,7 +82,7 @@ const Input = ({ emoji }) => {
             date: Timestamp.now(),
           }),
         });
-        await updateDoc(doc(firestoredb, "userChats", data.contact.uid), {
+        await updateDoc(doc(firestoredb, "userChats", data.contactInfo.uid), {
           [data.chatId + ".lastMessage"]: {
             text: textRef.current,
           },

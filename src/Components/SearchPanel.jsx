@@ -14,7 +14,7 @@ import {
   startAt,
   updateDoc,
 } from "firebase/firestore";
-import { firestoredb } from "../index";
+import { firestoredb, getChatId } from "../index";
 import defaultDP from "../img/user.png";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../store/user/user.selector";
@@ -47,10 +47,7 @@ const SearchPanel = () => {
   const handleSelect = async (e) => {
     const element = e.target.id ? e.target : e.target.parentElement;
     user.current = username.find((u) => u.uid === element.id);
-    const chatId =
-      currentUser.uid > user.current.uid
-        ? currentUser.uid + "@" + user.current.uid
-        : user.current.uid + "@" + currentUser.uid;
+    const chatId = getChatId(currentUser, contactInfo);
     let contactInfo = user.current;
     dispatch(selectContact({ contactInfo, chatId }));
     dispatch(showSmallScreenMessage());

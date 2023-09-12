@@ -15,7 +15,7 @@ import Loader from "../Components/Loader";
 import { setDoc, doc } from "firebase/firestore";
 import setDatabase from "../utils/setDatabase";
 import { useDispatch } from "react-redux";
-import { ReInitializeUser, signUpStart } from "../store/user/user.action";
+import { reInitializeUser, signUpStart } from "../store/user/user.action";
 import { waitForAuthResponse } from "../utils/awaitAuthResponse";
 export default function SignUp() {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ export default function SignUp() {
     setIsSigningUp(true);
     const { email, password, displayName } = user;
     try {
-      dispatch(ReInitializeUser(INITIAL_STATE));
+      dispatch(reInitializeUser(INITIAL_STATE));
       dispatch(signUpStart(email, password, displayName, img));
       const a = await waitForAuthResponse();
       console.log(a);
